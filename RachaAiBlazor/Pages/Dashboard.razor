@@ -1,0 +1,133 @@
+@page "/dashboard"
+
+@using RachaAiBlazor.Models
+
+<PageTitle>Dashboard</PageTitle>
+
+<h2 class="mb-4">Dashboard Financeiro</h2>
+
+<!-- CARDS -->
+
+<div class="row mb-4">
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow border-0">
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total a Receber
+                </h6>
+
+                <h3 class="text-success">
+                    R$ 1.500,00
+                </h3>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow border-0">
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total a Pagar
+                </h6>
+
+                <h3 class="text-danger">
+                    R$ 800,00
+                </h3>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow border-0">
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Saldo Geral
+                </h6>
+
+                <h3 class="text-primary">
+                    R$ 700,00
+                </h3>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- CAMPO DE BUSCA -->
+
+<div class="mb-4">
+
+    <input type="text" class="form-control" placeholder="Buscar grupo..." @bind="textoBusca" @bind:event="oninput" />
+
+</div>
+
+<!-- LISTA DE GRUPOS -->
+
+<h4 class="mb-3">Grupos Ativos</h4>
+
+@if (gruposFiltrados.Any())
+{
+    @foreach (var grupo in gruposFiltrados)
+    {
+        <GrupoCard Grupo="grupo" />
+    }
+}
+else
+{
+    <div class="alert alert-info">
+        Você ainda não participa de nenhum grupo.
+        Que tal criar um?
+    </div>
+}
+
+<!-- BOTÃO FLUTUANTE -->
+
+<button class="btn btn-primary rounded-circle fab">
+    +
+</button>
+
+@code {
+
+    string textoBusca = string.Empty;
+
+    List<Grupo> grupos = new()
+    {
+        new Grupo
+        {
+            Nome = "República",
+            Categoria = "Moradia",
+            ValorPendente = 350,
+            NoVermelho = true
+        },
+
+        new Grupo
+        {
+            Nome = "Churrasco Domingo",
+            Categoria = "Lazer",
+            ValorPendente = 120,
+            NoVermelho = false
+        },
+
+        new Grupo
+        {
+            Nome = "Viagem",
+            Categoria = "Turismo",
+            ValorPendente = 980,
+            NoVermelho = true
+        }
+    };
+
+    List<Grupo> gruposFiltrados =>
+        grupos.Where(g =>
+            g.Nome.Contains(textoBusca,
+            StringComparison.OrdinalIgnoreCase))
+        .ToList();
+
+}
